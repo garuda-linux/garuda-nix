@@ -5,9 +5,9 @@
 
 ## General information
 
-Garuda Nix is a Nix flake, which allows easy dual boot with Garuda Linux. But it also provides a framework for pure NixOS, which provides opinionated defaults and a system which can be fully set up by toggling a few module options or installed using our [installer ISO](./iso/quick-start.md).
+Garuda Nix is a Nix flake, which allows easy dual boot with Garuda Linux. But it also provides a framework for pure NixOS, which provides opinionated defaults and a system which can be fully set up by toggling a few module options or installed using our [installer ISO](./iso/getting.md).
 
-Prefer a graphical install? The flake also builds an [installer ISO](./iso/build.md) with a Calamares GUI for beginners and an [`install-garuda-nix` CLI](./iso/install.md) with presets, automatic partition layouts, and impermanence support.
+Prefer a graphical install? The flake also builds an [installer ISO](./iso/getting#build.md) with a Calamares GUI for beginners and an [`install-garuda-nix` CLI](./iso/install.md) with presets, automatic partition layouts, and impermanence support.
 
 ## Quick links
 

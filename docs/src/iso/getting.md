@@ -2,7 +2,7 @@
 
 ## Download
 
-The ISO can be downloaded from our [builds page page](https://builds.garudalinux.org/garuda-nix/).
+The ISO can be downloaded from our [builds page](https://builds.garudalinux.org/garuda-nix/).
 Available build types:
 
 - `garuda-nix-dr460nized-26.11-x86_64-linux.iso`: these are built daily and point to our latest stable tag, which is only tagged if evaluation and a few other checks pass
