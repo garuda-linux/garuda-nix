@@ -8,8 +8,8 @@
 edition=${GNS_EDITION:-mokka}
 
 if [ "$(stat -f -c %T /)" != "btrfs" ]; then
-  echo "The root filesystem of the Arch image is not btrfs, the subsystem needs btrfs." >&2
-  exit 1
+	echo "The root filesystem of the Arch image is not btrfs, the subsystem needs btrfs." >&2
+	exit 1
 fi
 
 # Lima grows the disk image, but not the root partition and its btrfs. A full
@@ -25,8 +25,8 @@ btrfs filesystem resize max /
 free_gib=$(($(stat -f -c %a /) * $(stat -f -c %S /) / 1073741824))
 
 if [ "$free_gib" -lt 40 ]; then
-  echo "Only $free_gib GiB free on /, the subsystem install needs about 40 GiB." >&2
-  exit 1
+	echo "Only $free_gib GiB free on /, the subsystem install needs about 40 GiB." >&2
+	exit 1
 fi
 
 step "$free_gib GiB free on /"
@@ -36,11 +36,11 @@ pacman-key --init
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 pacman-key --lsign-key 3056513887B78AEB
 pacman -U --noconfirm --needed \
-  https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst \
-  https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst
+	https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst \
+	https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst
 
 if ! grep -q '^\[garuda\]' /etc/pacman.conf; then
-  cat >>/etc/pacman.conf <<'EOF'
+	cat >>/etc/pacman.conf <<'EOF'
 
 [garuda]
 Include = /etc/pacman.d/chaotic-mirrorlist
@@ -62,7 +62,7 @@ git config --system --add safe.directory /mnt/src
 step "Installing the subsystem ($edition, this takes a while)"
 installer=$(mktemp)
 sed -E "s|\"git\+https://[^\"]*#gns-install\"|\"$SRC_FLAKE#gns-install\"|" \
-  /usr/lib/garuda/garuda-nix-subsystem/installer >"$installer"
+	/usr/lib/garuda/garuda-nix-subsystem/installer >"$installer"
 grep -qF "$SRC_FLAKE#gns-install" "$installer"
 bash "$installer" "$edition"
 rm -f "$installer"

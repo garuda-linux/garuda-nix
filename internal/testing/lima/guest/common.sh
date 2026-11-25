@@ -23,57 +23,57 @@ STATE_DIR=var/lib/garuda/garuda-update
 LOG_FILE=/var/log/garuda/garuda-update
 
 if [ -x /nix/var/nix/profiles/default/bin/nix ] && ! command -v nix >/dev/null; then
-  PATH="/nix/var/nix/profiles/default/bin:$PATH"
+	PATH="/nix/var/nix/profiles/default/bin:$PATH"
 fi
 
 NIX=(nix --extra-experimental-features "nix-command flakes" --accept-flake-config)
 
 step() {
-  echo -e "\033[1;32m»\033[0m $*" >&2
+	echo -e "\033[1;32m»\033[0m $*" >&2
 }
 
 fail() {
-  echo -e "\033[1;31mFAIL:\033[0m $*" >&2
-  FAILED=1
+	echo -e "\033[1;31mFAIL:\033[0m $*" >&2
+	FAILED=1
 }
 
 pass() {
-  echo -e "\033[1;32mok:\033[0m $*" >&2
+	echo -e "\033[1;32mok:\033[0m $*" >&2
 }
 
 commit_all() {
-  git -C "$1" -c user.name=lima -c user.email=lima@localhost commit -qam "$2"
+	git -C "$1" -c user.name=lima -c user.email=lima@localhost commit -qam "$2"
 }
 
 expect() {
-  local msg=$1
-  shift
+	local msg=$1
+	shift
 
-  if "$@" >/dev/null 2>&1; then pass "$msg"; else fail "$msg"; fi
+	if "$@" >/dev/null 2>&1; then pass "$msg"; else fail "$msg"; fi
 }
 
 current_sequence() {
-  git --git-dir=/mnt/src show "$SRC_REF:packages/garuda-update/fixes.py" |
-    sed -n 's/^CURRENT_SEQUENCE = \([0-9]*\)$/\1/p'
+	git --git-dir=/mnt/src show "$SRC_REF:packages/garuda-update/fixes.py" |
+		sed -n 's/^CURRENT_SEQUENCE = \([0-9]*\)$/\1/p'
 }
 
 # Checks shared by every scenario. $1 is the system root, $2 the flake.
 check_fixes() {
-  local root=$1 flake=$2 seq=$SEQUENCE
+	local root=$1 flake=$2 seq=$SEQUENCE
 
-  expect "flake.nix uses the new repo name" \
-    grep -qF "\"$RENAMED_GARUDA_URL\"" "$flake/flake.nix"
-  expect "flake.nix has no garuda-nix-subsystem URL left" \
-    sh -c "! grep -q 'garuda-linux/garuda-nix-subsystem' '$flake/flake.nix'"
-  expect "backup of repo-rename exists" \
-    test -d "$root/$STATE_DIR/backups/repo-rename"
-  expect "intervention_sequence is $seq" \
-    grep -qx "INTERVENTION_SEQUENCE=$seq" "$root/$STATE_DIR/intervention_sequence"
-  expect "log file $LOG_FILE is not empty" test -s "$LOG_FILE"
+	expect "flake.nix uses the new repo name" \
+		grep -qF "\"$RENAMED_GARUDA_URL\"" "$flake/flake.nix"
+	expect "flake.nix has no garuda-nix-subsystem URL left" \
+		sh -c "! grep -q 'garuda-linux/garuda-nix-subsystem' '$flake/flake.nix'"
+	expect "backup of repo-rename exists" \
+		test -d "$root/$STATE_DIR/backups/repo-rename"
+	expect "intervention_sequence is $seq" \
+		grep -qx "INTERVENTION_SEQUENCE=$seq" "$root/$STATE_DIR/intervention_sequence"
+	expect "log file $LOG_FILE is not empty" test -s "$LOG_FILE"
 }
 
 # Current system generation number of a profile. The link target is relative
 # after nixos-rebuild, absolute after nh os rollback.
 generation() {
-  readlink "${1:-/nix/var/nix/profiles/system}" | sed -n 's/^\(.*\/\)\{0,1\}system-\([0-9]*\)-link$/\2/p'
+	readlink "${1:-/nix/var/nix/profiles/system}" | sed -n 's/^\(.*\/\)\{0,1\}system-\([0-9]*\)-link$/\2/p'
 }
